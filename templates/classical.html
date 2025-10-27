@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>PolicyNav — Classical Search</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #f5f8fc;
+      margin: 0;
+      padding: 0;
+      text-align: center;
+      color: #333;
+    }
+    h1 { margin-top: 30px; color: #2c3e50; }
+    .links { margin-top: 10px; }
+    a { color: #6c5ce7; font-weight: 600; text-decoration: none; margin: 0 10px; }
+    form {
+      margin: 20px auto;
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    input[type="text"], input[type="number"] {
+      padding: 10px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+    }
+    input[type="text"] { width: 350px; }
+    input[type="number"] { width: 100px; }
+    button {
+      background: #6c5ce7;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      padding: 10px 20px;
+      cursor: pointer;
+      font-weight: 600;
+    }
+    button:hover { background: #8e7cf7; }
+    .results-container {
+      width: 85%;
+      margin: 30px auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+    .result-card {
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+    .dashboard {
+      background: #ffffff;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(108, 92, 231, 0.2);
+      margin: 40px auto;
+      padding: 25px;
+      width: 90%;
+      text-align: center;
+      border: 1px solid #ecebff;
+    }
+    .charts-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 25px;
+    }
+    .chart-box {
+      background: #f5f0ff;
+      border-radius: 10px;
+      padding: 15px;
+      box-shadow: 0 2px 6px rgba(108, 92, 231, 0.1);
+    }
+  </style>
+</head>
+<body>
+  <h1>📚 PolicyNav — Classical Search</h1>
+  <div class="links">
+    <a href="/quantum_search">⚛️ Switch to Quantum Search</a>
+  </div>
+
+  <form method="post" action="/classical_search">
+  <input type="text" name="query" placeholder="Enter your query..." value="{{ query }}" required>
+  <label for="top_k">Results (1–10):</label>
+  <input type="range" id="top_k" name="top_k" min="1" max="10" value="{{ top_k or 5 }}" oninput="this.nextElementSibling.value=this.value">
+  <output>{{ top_k or 5 }}</output>
+  <button type="submit">Classical Search</button>
+ </form>
+
+
+  <div class="dashboard">
+    <h2>📊 Classical Search Insights</h2>
+    <div class="charts-container">
+      <div class="chart-box"><canvas id="classicalStatusChart"></canvas></div>
+      <div class="chart-box"><canvas id="classicalRegionChart"></canvas></div>
+      <div class="chart-box"><canvas id="classicalScoreChart"></canvas></div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script>
+    (() => {
+      const classicalResults = JSON.parse('{{ results|default([])|tojson }}');
+      console.log("Classical Results:", classicalResults);
+
+      // Example dummy chart data — replace dynamically later
+      const cStatus = ['Implemented', 'Planned', 'Draft'];
+      const cStatusCounts = [10, 5, 2];
+      const cRegions = ['North', 'South', 'East', 'West'];
+      const cRegionCounts = [6, 4, 3, 4];
+      const cScores = [0.12, 0.18, 0.24, 0.31, 0.35, 0.42];
+
+      new Chart(document.getElementById('classicalStatusChart'), {
+        type: 'doughnut',
+        data: { labels: cStatus, datasets: [{ data: cStatusCounts, backgroundColor: ['#6c5ce7','#a29bfe','#00cec9'] }] },
+        options: { plugins: { title: { display: true, text: 'Policy Status Breakdown (Classical)' } } }
+      });
+      new Chart(document.getElementById('classicalRegionChart'), {
+        type: 'bar',
+        data: { labels: cRegions, datasets: [{ label: 'Policies', data: cRegionCounts, backgroundColor: '#8e7cf7' }] },
+        options: { plugins: { title: { display: true, text: 'Policies by Region (Classical)' } }, scales: { y: { beginAtZero: true } } }
+      });
+      new Chart(document.getElementById('classicalScoreChart'), {
+        type: 'line',
+        data: { labels: cScores.map((_,i)=>`Result ${i+1}`), datasets: [{ label: 'Similarity Scores', data: cScores, borderColor: '#6c5ce7', backgroundColor: '#a29bfe66', fill:true, tension:0.3 }] },
+        options: { plugins: { title: { display: true, text: 'Cosine Similarity Scores' } }, scales: { y: { beginAtZero:true } } }
+      });
+    })();
+  </script>
+
+  {% if results %}
+  <div class="results-container">
+    {% for r in results %}
+      <div class="result-card">
+        <h3>{{ r.title }} ({{ r.policy_id }})</h3>
+        <p><b>Region:</b> {{ r.region }} | <b>Year:</b> {{ r.year }}</p>
+        <p><b>Status:</b> {{ r.status }} | <b>Score:</b> {{ r.score }}</p>
+        <p>{{ r.summary }}</p>
+      </div>
+    {% endfor %}
+  </div>
+  {% endif %}
+</body>
+</html>
