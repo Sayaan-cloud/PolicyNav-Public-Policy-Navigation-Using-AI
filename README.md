@@ -61,33 +61,35 @@ Governments release countless policies every year — often scattered, repetitiv
 
 edu_policies/
 │
-├── app.py # Main FastAPI entry point
+├── app.py
 │
-├── classical/ # Classical ML models
-│ ├── classical_model.ipynb
-│ ├── policy_tfidf_matrix.pkl
-│ └── policy_vectorizer.pkl
+├── classical/
+│   ├── classical_model.ipynb
+│   ├── policy_tfidf_matrix.pkl
+│   └── policy_vectorizer.pkl
 │
-├── quantum/ # Quantum ML models
-│ ├── quantum_model.ipynb
-│ ├── quantum_policy_kernel_matrix.pkl
-│ ├── quantum_policy_qsvc_model.pkl
-│ ├── policy_scaler.pkl
-│ └── policy_pca.pkl
+├── quantum/
+│   ├── quantum_model.ipynb
+│   ├── quantum_policy_kernel_matrix.pkl
+│   ├── quantum_policy_qsvc_model.pkl
+│   ├── policy_scaler.pkl
+│   └── policy_pca.pkl
 │
-├── datasets/ # Policy datasets
-│ ├── education_policies.csv
-│ ├── train_policies.csv
-│ └── test_policies.csv
+├── datasets/
+│   ├── education_policies.csv
+│   ├── train_policies.csv
+│   └── test_policies.csv
 │
-├── templates/ # HTML templates (Jinja2)
-│ ├── classical.html
-│ └── quantum.html
+├── templates/
+│   ├── classical.html
+│   └── quantum.html
 │
-├── static/ # CSS, JS, images
+├── static/
+│   └── (your CSS + JS)
 │
-└── .gitignore # Excludes cache, venv, temp files
-
+├── .gitignore
+├── requirements.txt
+└── README.md
 
 ---
 
