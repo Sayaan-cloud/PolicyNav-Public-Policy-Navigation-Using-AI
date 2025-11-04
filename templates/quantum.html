@@ -144,6 +144,27 @@
     </div>
   </div>
 
+  
+
+  {% if results %}
+  <div class="results-container">
+    {% for r in results %}
+      <div class="result-card">
+        <h3>{{ r.title }} <span class="result-score">{{ "%.3f"|format(r.score) }}</span></h3>
+        <div class="result-meta">
+          <b>Policy ID:</b> {{ r.policy_id }} |
+          <b>Region:</b> {{ r.region }} |
+          <b>Year:</b> {{ r.year }} |
+          <b>Status:</b> {{ r.status }}
+        </div>
+        <p>{{ r.summary }}</p>
+      </div>
+    {% endfor %}
+  </div>
+  {% else %}
+    <div class="no-results">No results — try another query.</div>
+  {% endif %}
+
   <!-- ⚛️ Quantum Insights Dashboard -->
   <div class="dashboard">
     <h2>🧠 Quantum Search Insights</h2>
@@ -248,25 +269,6 @@
       }
     });
   </script>
-
-  {% if results %}
-  <div class="results-container">
-    {% for r in results %}
-      <div class="result-card">
-        <h3>{{ r.title }} <span class="result-score">{{ "%.3f"|format(r.score) }}</span></h3>
-        <div class="result-meta">
-          <b>Policy ID:</b> {{ r.policy_id }} |
-          <b>Region:</b> {{ r.region }} |
-          <b>Year:</b> {{ r.year }} |
-          <b>Status:</b> {{ r.status }}
-        </div>
-        <p>{{ r.summary }}</p>
-      </div>
-    {% endfor %}
-  </div>
-  {% else %}
-    <div class="no-results">No results — try another query.</div>
-  {% endif %}
 
 </body>
 </html>

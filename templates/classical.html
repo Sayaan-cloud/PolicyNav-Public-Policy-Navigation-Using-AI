@@ -91,6 +91,21 @@
  </form>
 
 
+  
+
+  {% if results %}
+  <div class="results-container">
+    {% for r in results %}
+      <div class="result-card">
+        <h3>{{ r.title }} ({{ r.policy_id }})</h3>
+        <p><b>Region:</b> {{ r.region }} | <b>Year:</b> {{ r.year }}</p>
+        <p><b>Status:</b> {{ r.status }} | <b>Score:</b> {{ r.score }}</p>
+        <p>{{ r.summary }}</p>
+      </div>
+    {% endfor %}
+  </div>
+  {% endif %}
+
   <div class="dashboard">
     <h2>📊 Classical Search Insights</h2>
     <div class="charts-container">
@@ -130,18 +145,6 @@
       });
     })();
   </script>
-
-  {% if results %}
-  <div class="results-container">
-    {% for r in results %}
-      <div class="result-card">
-        <h3>{{ r.title }} ({{ r.policy_id }})</h3>
-        <p><b>Region:</b> {{ r.region }} | <b>Year:</b> {{ r.year }}</p>
-        <p><b>Status:</b> {{ r.status }} | <b>Score:</b> {{ r.score }}</p>
-        <p>{{ r.summary }}</p>
-      </div>
-    {% endfor %}
-  </div>
-  {% endif %}
+  
 </body>
 </html>
