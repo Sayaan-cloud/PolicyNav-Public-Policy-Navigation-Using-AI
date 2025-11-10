@@ -1,150 +1,93 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>PolicyNav — Classical Search</title>
+  <title>PolicyNav — Classical</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <link rel="stylesheet" href="/static/main.css" />
   <style>
-    body {
-      font-family: 'Segoe UI', sans-serif;
-      background: #f5f8fc;
-      margin: 0;
-      padding: 0;
-      text-align: center;
-      color: #333;
-    }
-    h1 { margin-top: 30px; color: #2c3e50; }
-    .links { margin-top: 10px; }
-    a { color: #6c5ce7; font-weight: 600; text-decoration: none; margin: 0 10px; }
-    form {
-      margin: 20px auto;
-      display: flex;
-      justify-content: center;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
-    input[type="text"], input[type="number"] {
-      padding: 10px;
-      border-radius: 6px;
-      border: 1px solid #ccc;
-    }
-    input[type="text"] { width: 350px; }
-    input[type="number"] { width: 100px; }
-    button {
-      background: #6c5ce7;
-      color: #fff;
-      border: none;
-      border-radius: 6px;
-      padding: 10px 20px;
-      cursor: pointer;
-      font-weight: 600;
-    }
-    button:hover { background: #8e7cf7; }
-    .results-container {
-      width: 85%;
-      margin: 30px auto;
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 20px;
-    }
-    .result-card {
-      background: white;
-      padding: 20px;
-      border-radius: 10px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-    }
-    .dashboard {
-      background: #ffffff;
-      border-radius: 10px;
-      box-shadow: 0 4px 10px rgba(108, 92, 231, 0.2);
-      margin: 40px auto;
-      padding: 25px;
-      width: 90%;
-      text-align: center;
-      border: 1px solid #ecebff;
-    }
-    .charts-container {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 25px;
-    }
-    .chart-box {
-      background: #f5f0ff;
-      border-radius: 10px;
-      padding: 15px;
-      box-shadow: 0 2px 6px rgba(108, 92, 231, 0.1);
-    }
+    /* Quick fallback */
+    body{font-family:Inter, system-ui, -apple-system, sans-serif; background:#f5f8fc; margin:0; color:#222}
+    header{display:flex;justify-content:space-between;align-items:center;background:#fff;padding:16px 28px;box-shadow:0 2px 8px rgba(0,0,0,0.04)}
+    h1{margin:0;font-size:18px}
+    .logout-btn{background:#ff4757;color:#fff;border:none;padding:8px 12px;border-radius:8px;cursor:pointer}
+    form.search{display:flex;gap:10px;justify-content:center;padding:18px}
+    input[type="text"]{padding:10px;border-radius:8px;border:1px solid #e6e9f2;width:360px}
+    .results-container{width:90%;margin:20px auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:18px}
+    .result-card{background:#fff;padding:18px;border-radius:12px;box-shadow:0 6px 18px rgba(60,50,120,0.04);text-align:left}
+    .dashboard{width:90%;margin:32px auto;padding:18px;background:#fff;border-radius:12px;box-shadow:0 6px 18px rgba(108,92,231,0.06)}
   </style>
 </head>
 <body>
-  <h1>📚 PolicyNav — Classical Search</h1>
-  <div class="links">
-    <a href="/quantum_search">⚛️ Switch to Quantum Search</a>
-  </div>
+  <header>
+    <h1>📚 PolicyNav — Classical Search</h1>
+    <div style="display:flex;gap:12px;align-items:center">
+      <a href="/quantum" style="color:#6c5ce7;font-weight:600;text-decoration:none;margin-right:6px">⚛️ Quantum</a>
+      <form action="/logout" method="post" style="margin:0;">
+        <button class="logout-btn" type="submit">Logout</button>
+      </form>
+    </div>
+  </header>
 
-  <form method="post" action="/classical_search">
-  <input type="text" name="query" placeholder="Enter your query..." value="{{ query }}" required>
-  <label for="top_k">Results (1–10):</label>
-  <input type="range" id="top_k" name="top_k" min="1" max="10" value="{{ top_k or 5 }}" oninput="this.nextElementSibling.value=this.value">
-  <output>{{ top_k or 5 }}</output>
-  <button type="submit">Classical Search</button>
- </form>
-
-
-  
+  <form class="search" method="post" action="/classical_search">
+    <input type="text" name="query" placeholder="Search policies..." value="{{ query }}" required />
+    <div style="display:flex;align-items:center;gap:8px">
+      <label for="top_k">Results</label>
+      <input type="range" id="top_k" name="top_k" min="1" max="10" value="{{ top_k or 5 }}" oninput="this.nextElementSibling.value=this.value">
+      <output>{{ top_k or 5 }}</output>
+      <button type="submit" style="background:#6c5ce7;color:#fff;border:none;padding:10px 14px;border-radius:8px">Search</button>
+    </div>
+  </form>
 
   {% if results %}
   <div class="results-container">
     {% for r in results %}
       <div class="result-card">
-        <h3>{{ r.title }} ({{ r.policy_id }})</h3>
-        <p><b>Region:</b> {{ r.region }} | <b>Year:</b> {{ r.year }}</p>
-        <p><b>Status:</b> {{ r.status }} | <b>Score:</b> {{ r.score }}</p>
-        <p>{{ r.summary }}</p>
+        <h3 style="margin:0 0 6px 0">{{ r.title }} <small style="color:#666">({{ r.policy_id }})</small></h3>
+        <p style="margin:6px 0;color:#555"><b>Region:</b> {{ r.region }} | <b>Year:</b> {{ r.year }} | <b>Status:</b> {{ r.status }}</p>
+        <p style="color:#333">{{ r.summary }}</p>
+        <p style="color:#6c5ce7;font-weight:700;margin-top:8px">Score: {{ "%.4f"|format(r.score) }}</p>
       </div>
     {% endfor %}
   </div>
   {% endif %}
 
   <div class="dashboard">
-    <h2>📊 Classical Search Insights</h2>
-    <div class="charts-container">
-      <div class="chart-box"><canvas id="classicalStatusChart"></canvas></div>
-      <div class="chart-box"><canvas id="classicalRegionChart"></canvas></div>
-      <div class="chart-box"><canvas id="classicalScoreChart"></canvas></div>
+    <h2 style="margin-top:0">Classical Search Insights</h2>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px">
+      <div style="background:#f8f7ff;padding:12px;border-radius:10px"><canvas id="statusChart"></canvas></div>
+      <div style="background:#f8f7ff;padding:12px;border-radius:10px"><canvas id="regionChart"></canvas></div>
+      <div style="background:#f8f7ff;padding:12px;border-radius:10px"><canvas id="scoreChart"></canvas></div>
     </div>
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script>
-    (() => {
-      const classicalResults = JSON.parse('{{ results|default([])|tojson }}');
-      console.log("Classical Results:", classicalResults);
+    const classicalResults = JSON.parse('{{ results|default([])|tojson }}');
 
-      // Example dummy chart data — replace dynamically later
-      const cStatus = ['Implemented', 'Planned', 'Draft'];
-      const cStatusCounts = [10, 5, 2];
-      const cRegions = ['North', 'South', 'East', 'West'];
-      const cRegionCounts = [6, 4, 3, 4];
-      const cScores = [0.12, 0.18, 0.24, 0.31, 0.35, 0.42];
+    // build aggregates
+    const statusCounts = {};
+    const regionCounts = {};
+    const scores = [];
 
-      new Chart(document.getElementById('classicalStatusChart'), {
-        type: 'doughnut',
-        data: { labels: cStatus, datasets: [{ data: cStatusCounts, backgroundColor: ['#6c5ce7','#a29bfe','#00cec9'] }] },
-        options: { plugins: { title: { display: true, text: 'Policy Status Breakdown (Classical)' } } }
-      });
-      new Chart(document.getElementById('classicalRegionChart'), {
-        type: 'bar',
-        data: { labels: cRegions, datasets: [{ label: 'Policies', data: cRegionCounts, backgroundColor: '#8e7cf7' }] },
-        options: { plugins: { title: { display: true, text: 'Policies by Region (Classical)' } }, scales: { y: { beginAtZero: true } } }
-      });
-      new Chart(document.getElementById('classicalScoreChart'), {
-        type: 'line',
-        data: { labels: cScores.map((_,i)=>`Result ${i+1}`), datasets: [{ label: 'Similarity Scores', data: cScores, borderColor: '#6c5ce7', backgroundColor: '#a29bfe66', fill:true, tension:0.3 }] },
-        options: { plugins: { title: { display: true, text: 'Cosine Similarity Scores' } }, scales: { y: { beginAtZero:true } } }
-      });
-    })();
+    classicalResults.forEach(r => {
+      const s = r.status || "Unknown";
+      const reg = r.region || "Unknown";
+      statusCounts[s] = (statusCounts[s] || 0) + 1;
+      regionCounts[reg] = (regionCounts[reg] || 0) + 1;
+      scores.push(Number(r.score || 0));
+    });
+
+    // fallback sample if empty
+    const statusLabels = Object.keys(statusCounts).length ? Object.keys(statusCounts) : ['Implemented','Planned','Draft'];
+    const statusData = Object.values(statusCounts).length ? Object.values(statusCounts) : [3,2,1];
+    const regionLabels = Object.keys(regionCounts).length ? Object.keys(regionCounts) : ['North','South','East','West'];
+    const regionData = Object.values(regionCounts).length ? Object.values(regionCounts) : [4,3,2,1];
+    const scoreData = scores.length ? scores : [0.12,0.24,0.31,0.41];
+
+    new Chart(document.getElementById('statusChart'), { type:'doughnut', data:{labels:statusLabels,datasets:[{data:statusData}]}, options:{plugins:{title:{display:true,text:'Status Breakdown'}}}});
+    new Chart(document.getElementById('regionChart'), { type:'bar', data:{labels:regionLabels,datasets:[{label:'Policies',data:regionData}]}, options:{plugins:{title:{display:true,text:'Policies by Region'}},scales:{y:{beginAtZero:true}}}});
+    new Chart(document.getElementById('scoreChart'), { type:'line', data:{labels:scoreData.map((_,i)=>`R${i+1}`), datasets:[{label:'Similarity', data:scoreData, fill:true, tension:0.3}]}, options:{plugins:{title:{display:true,text:'Similarity Scores'}},scales:{y:{beginAtZero:true}}}});
   </script>
-  
 </body>
 </html>

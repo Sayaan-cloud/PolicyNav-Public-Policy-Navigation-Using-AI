@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PolicyNav | AI-driven Policy Insight</title>
+  <link rel="stylesheet" href="{{ url_for('static', path='css/style.css') }}">
+  <script src="{{ url_for('static', path='js/main.js') }}" defer></script>
+</head>
+
+<body>
+  <!-- NAVBAR -->
+  <header class="navbar">
+    <div class="logo">PolicyNav</div>
+    <nav>
+      <ul class="nav-links">
+        <li><a href="#home">Home</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="#purpose">Purpose</a></li>
+        <li><a href="#technology">Technology</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </nav>
+    <a href="/login" class="login-btn">Login</a>
+  </header>
+
+  <!-- HERO -->
+  <section id="home" class="hero fade-in">
+    <h1>AI + Quantum Intelligence for Policy Understanding</h1>
+    <p>Transforming education policy data into human insight — powered by AI, Quantum Computing, and empathy.</p>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about" class="section fade-up">
+    <h2 class="section-title">About PolicyNav</h2>
+    <div class="section-split">
+      <div class="section-text">
+        <p>
+          PolicyNav is an AI-driven framework built to make complex policies understandable to everyone. 
+          It fuses the rigor of <strong>Machine Learning</strong> with the innovation of <strong>Quantum Computing</strong> — 
+          unraveling how education policies shape societies and futures.
+        </p>
+
+        <p>
+          This isn’t just another data project — it’s an evolving ecosystem where intelligence meets empathy. 
+          Every model and visualization is crafted to bridge the gap between information and understanding.
+        </p>
+
+        <p>
+          In a world overflowing with data, PolicyNav stands for clarity, transparency, and insight — turning static 
+          text into meaningful stories that empower change.
+        </p>
+      </div>
+
+      <!-- Storyset Illustration -->
+      <div class="section-img fade-up">
+        <img src="{{ url_for('static', path='images/education.svg') }}" alt="AI research illustration">
+      </div>
+    </div>
+  </section>
+
+  <!-- PURPOSE -->
+  <section id="purpose" class="section fade-up alt-bg">
+    <h2 class="section-title">Our Purpose</h2>
+    <div class="section-split reverse">
+      <div class="section-img fade-up">
+        <img src="{{ url_for('static', path='images/online_report.svg') }}" alt="Education illustration">
+      </div>
+      <div class="section-text">
+        <p>
+          Every policy has intent, but that intent often gets lost. 
+          PolicyNav decodes that language — turning paragraphs into patterns and meaning.
+        </p>
+
+        <p>
+          Our focus is <strong>Education Policies</strong> — because education drives transformation. 
+          By exploring legislative reforms and social outcomes, PolicyNav gives a panoramic view of their real impact.
+        </p>
+
+        <p>
+          Beyond analysis, our mission is to democratize understanding — 
+          enabling informed citizens, transparent governments, and responsible policymaking.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- TECHNOLOGY GRID -->
+  <section id="technology" class="section fade-up">
+    <h2 class="section-title">Technologies Behind PolicyNav</h2>
+    <div class="tech-grid">
+      <div class="tech-card">🤖 <strong>Machine Learning</strong><p>Classical algorithms for prediction and classification of education policies.</p></div>
+      <div class="tech-card">⚛️ <strong>Quantum Computing</strong><p>QSVC and Quantum Kernels for feature representation and optimization.</p></div>
+      <div class="tech-card">🧠 <strong>NLP Models</strong><p>Sentence Transformers for embedding and semantic analysis of text.</p></div>
+      <div class="tech-card">📊 <strong>Visualization</strong><p>Interactive dashboards for insights and interpretability.</p></div>
+      <div class="tech-card">☁️ <strong>Deployment</strong><p>FastAPI backend with scalable, cloud-ready architecture.</p></div>
+      <div class="tech-card">🧩 <strong>Ethical AI</strong><p>Transparency and fairness as the foundation of responsible innovation.</p></div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+<section id="contact" class="section fade-up alt-bg">
+  <h2 class="section-title">Connect With Us</h2>
+  <div class="section-split">
+    <div class="section-text">
+      <p>
+        Have questions, ideas, or want to collaborate?  
+        PolicyNav welcomes researchers, technologists, and educators to join our journey toward transparent, accessible policy intelligence.
+      </p>
+
+      <div class="contact-links">
+        <p>🌐 <a href="https://www.linkedin.com/in/sai-surya-663b052b8/" target="_blank">LinkedIn</a></p>
+        <p>💻 <a href="https://github.com/Sayaan-cloud/PolicyNav-Public-Policy-Navigation-Using-AI" target="_blank">GitHub</a></p>
+      </div>
+    </div>
+
+    <div class="section-img fade-up">
+      <img src="{{ url_for('static', path='images/contact_us.svg') }}" alt="Contact us illustration">
+    </div>
+  </div>
+</section>
+
+
+  <!-- FOOTER -->
+  <footer>
+    <p>© 2025 PolicyNav. All rights reserved.</p>
+  </footer>
+</body>
+</html>

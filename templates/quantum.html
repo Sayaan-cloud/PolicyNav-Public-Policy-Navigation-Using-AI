@@ -1,274 +1,108 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>PolicyNav — Quantum Search</title>
+  <title>PolicyNav — Quantum</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <link rel="stylesheet" href="/static/main.css" />
   <style>
-    body {
-      font-family: 'Segoe UI', sans-serif;
-      background: #f5f8fc;
-      margin: 0;
-      padding: 0;
-      text-align: center;
-      color: #333;
-    }
-    h1 { margin-top: 30px; color: #2c3e50; }
-    .links { margin-top: 10px; }
-    a { color: #2980b9; font-weight: 600; text-decoration: none; margin: 0 10px; }
-    form {
-      margin: 20px auto;
-      display: flex;
-      justify-content: center;
-      gap: 10px;
-    }
-    input[type="text"] {
-      padding: 10px;
-      width: 350px;
-      border-radius: 6px;
-      border: 1px solid #ccc;
-    }
-    button {
-      background: #6c5ce7;
-      color: #fff;
-      border: none;
-      border-radius: 6px;
-      padding: 10px 20px;
-      cursor: pointer;
-      font-weight: 600;
-    }
-    button:hover { background: #8e7cf7; }
-
-    .summary-row {
-      width: 90%;
-      margin: 18px auto;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 12px;
-      flex-wrap: wrap;
-    }
-    .prediction-box {
-      background: white;
-      padding: 12px 16px;
-      border-radius: 8px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.06);
-      text-align: left;
-      min-width: 220px;
-    }
-    .prediction-box strong { color: #2c3e50; }
-
-    .results-container {
-      width: 85%;
-      margin: 30px auto;
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 20px;
-    }
-    .result-card {
-      background: white;
-      padding: 20px;
-      border-radius: 10px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-      text-align: left;
-    }
-    .result-meta { font-size: 0.9rem; color: #555; margin-bottom: 8px; }
-    .result-score { float: right; font-weight: 700; color: #6c5ce7; }
-
-    /* Dashboard */
-    .dashboard {
-      background: #ffffff;
-      border-radius: 10px;
-      box-shadow: 0 4px 10px rgba(108, 92, 231, 0.12);
-      margin: 40px auto;
-      padding: 25px;
-      width: 90%;
-      text-align: center;
-      border: 1px solid #ecebff;
-    }
-    .dashboard h2 {
-      margin-bottom: 20px;
-      color: #4834d4;
-    }
-    .charts-container {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 25px;
-    }
-    .chart-box {
-      background: #f5f0ff;
-      border-radius: 10px;
-      padding: 15px;
-      box-shadow: 0 2px 6px rgba(108, 92, 231, 0.06);
-    }
-
-    .no-results { color: #777; margin: 30px 0; }
+    body{font-family:Inter,system-ui;-webkit-font-smoothing:antialiased;background:#f5f8fc;margin:0;color:#222}
+    header{display:flex;justify-content:space-between;align-items:center;padding:16px 28px;background:#fff;box-shadow:0 2px 6px rgba(20,20,50,0.04)}
+    h1{margin:0}
+    .links{display:flex;gap:12px;align-items:center}
+    form.search{display:flex;gap:10px;justify-content:center;padding:18px}
+    input[type="text"]{padding:10px;border-radius:8px;border:1px solid #e6e9f2;width:360px}
+    .result-card{background:#fff;padding:18px;border-radius:12px;box-shadow:0 6px 18px rgba(60,50,120,0.04);margin-bottom:14px;text-align:left}
+    .dashboard{width:90%;margin:32px auto;padding:18px;background:#fff;border-radius:12px;box-shadow:0 6px 18px rgba(108,92,231,0.06)}
   </style>
 </head>
 <body>
-  <h1>⚛️ PolicyNav — Quantum Search</h1>
-  <div class="links">
-    <a href="/">← Back to Classical Search</a>
-  </div>
+  <header>
+    <h1>⚛️ PolicyNav — Quantum Search</h1>
+    <div class="links">
+      <a href="/classical" style="color:#6c5ce7;font-weight:600;text-decoration:none">← Classical</a>
+      <form action="/logout" method="post" style="margin:0"><button style="background:#6c5ce7;color:#fff;border:none;padding:8px 12px;border-radius:8px">Logout</button></form>
+    </div>
+  </header>
 
-  <form method="post" action="/quantum_search">
-  <input type="text" name="query" placeholder="Enter your query..." value="{{ query }}" required>
-  <label for="top_k">Results (1–10):</label>
-  <input type="range" id="top_k" name="top_k" min="1" max="10" value="{{ top_k or 5 }}" oninput="this.nextElementSibling.value=this.value">
-  <output>{{ top_k or 5 }}</output>
-  <button type="submit">Quantum Search</button>
+  <form class="search" method="post" action="/quantum_search">
+    <input type="text" name="query" placeholder="Type a query for quantum ranking..." value="{{ query }}" required />
+    <div style="display:flex;align-items:center;gap:8px">
+      <label for="top_k">Results</label>
+      <input type="range" id="top_k" name="top_k" min="1" max="10" value="{{ top_k or 5 }}" oninput="this.nextElementSibling.value=this.value">
+      <output>{{ top_k or 5 }}</output>
+      <button type="submit" style="background:#6c5ce7;color:#fff;border:none;padding:10px 14px;border-radius:8px">Search</button>
+    </div>
   </form>
 
-  <div class="summary-row">
-    <div class="prediction-box">
-      <div><strong>Prediction:</strong>
-        {% if prediction is not none %}
-          <span> {{ prediction }} </span>
-        {% else %}
-          <span> — </span>
-        {% endif %}
-      </div>
-      <div style="margin-top:6px;"><strong>Decision Score:</strong>
-        {% if decision_score is not none %}
-          <span> {{ "%.4f"|format(decision_score) }} </span>
-        {% else %}
-          <span> — </span>
-        {% endif %}
-      </div>
+  <div style="width:90%;margin:8px auto;display:flex;gap:12px;align-items:center;flex-wrap:wrap">
+    <div style="background:#fff;padding:12px;border-radius:10px;box-shadow:0 4px 12px rgba(0,0,0,0.04);min-width:220px">
+      <strong>Prediction:</strong>
+      {% if prediction is not none %}
+        <div>{{ prediction }}</div>
+      {% else %}
+        <div>—</div>
+      {% endif %}
+      <strong style="margin-top:8px;display:block">Decision score:</strong>
+      {% if decision_score is not none %}
+        <div>{{ "%.4f"|format(decision_score) }}</div>
+      {% else %}
+        <div>—</div>
+      {% endif %}
     </div>
-
-    <div style="flex:1; text-align:left; min-width:240px;">
-      <div style="font-size:0.95rem; color:#444;">
-        Showing quantum-ranked results (top {{ results|length if results else 0 }})
-      </div>
+    <div style="flex:1">
+      <div style="font-size:0.95rem;color:#444">Showing quantum-ranked results (top {{ results|length if results else 0 }})</div>
     </div>
   </div>
 
-  
-
-  {% if results %}
-  <div class="results-container">
-    {% for r in results %}
-      <div class="result-card">
-        <h3>{{ r.title }} <span class="result-score">{{ "%.3f"|format(r.score) }}</span></h3>
-        <div class="result-meta">
-          <b>Policy ID:</b> {{ r.policy_id }} |
-          <b>Region:</b> {{ r.region }} |
-          <b>Year:</b> {{ r.year }} |
-          <b>Status:</b> {{ r.status }}
+  <div style="width:90%;margin:18px auto">
+    {% if results %}
+      {% for r in results %}
+        <div class="result-card">
+          <h3 style="margin:0 0 6px 0">{{ r.title }} <span style="float:right;color:#6c5ce7;font-weight:700">{{ "%.6f"|format(r.score) }}</span></h3>
+          <div style="color:#666;margin-bottom:8px"><b>ID:</b> {{ r.policy_id }} | <b>Region:</b> {{ r.region }} | <b>Year:</b> {{ r.year }} | <b>Status:</b> {{ r.status }}</div>
+          <p>{{ r.summary }}</p>
         </div>
-        <p>{{ r.summary }}</p>
-      </div>
-    {% endfor %}
+      {% endfor %}
+    {% else %}
+      <div style="text-align:center;color:#777;padding:28px;background:#fff;border-radius:12px">No results — try another query.</div>
+    {% endif %}
   </div>
-  {% else %}
-    <div class="no-results">No results — try another query.</div>
-  {% endif %}
 
-  <!-- ⚛️ Quantum Insights Dashboard -->
   <div class="dashboard">
-    <h2>🧠 Quantum Search Insights</h2>
-    <div class="charts-container">
-      <div class="chart-box">
-        <canvas id="quantumStatusChart" height="220"></canvas>
-      </div>
-      <div class="chart-box">
-        <canvas id="quantumRegionChart" height="220"></canvas>
-      </div>
-      <div class="chart-box">
-        <canvas id="quantumScoreChart" height="220"></canvas>
-      </div>
+    <h2 style="margin-top:0">Quantum Search Insights</h2>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px">
+      <div style="background:#f8f7ff;padding:12px;border-radius:10px"><canvas id="qStatusChart"></canvas></div>
+      <div style="background:#f8f7ff;padding:12px;border-radius:10px"><canvas id="qRegionChart"></canvas></div>
+      <div style="background:#f8f7ff;padding:12px;border-radius:10px"><canvas id="qScoreChart"></canvas></div>
     </div>
   </div>
 
-  <!-- ===== Chart.js CDN ===== -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
   <script>
-    // Jinja-provided results (array of objects). If results is None, ensure empty list.
     const results = JSON.parse(`{{ results|default([])|tojson }}`);
 
-    // Build arrays for charts: statuses, regions, scores
     const statusCounts = {};
     const regionCounts = {};
     const scores = [];
 
     results.forEach(r => {
-      const status = r.status || "Unknown";
-      const region = r.region || "Unknown";
-      const score = (typeof r.score === 'number') ? r.score : parseFloat(r.score) || 0;
-
-      statusCounts[status] = (statusCounts[status] || 0) + 1;
-      regionCounts[region] = (regionCounts[region] || 0) + 1;
-      scores.push(score);
+      const s = r.status || "Unknown";
+      const reg = r.region || "Unknown";
+      statusCounts[s] = (statusCounts[s] || 0) + 1;
+      regionCounts[reg] = (regionCounts[reg] || 0) + 1;
+      scores.push(Number(r.score || 0));
     });
 
-    const qStatus = Object.keys(statusCounts);
-    const qStatusCounts = Object.values(statusCounts);
+    const qStatus = Object.keys(statusCounts).length ? Object.keys(statusCounts) : ['Implemented','Planned','Draft'];
+    const qStatusCounts = Object.values(statusCounts).length ? Object.values(statusCounts) : [3,2,1];
+    const qRegions = Object.keys(regionCounts).length ? Object.keys(regionCounts) : ['North','South','East','West'];
+    const qRegionCounts = Object.values(regionCounts).length ? Object.values(regionCounts) : [4,3,2,1];
+    const qScores = scores.length ? scores.sort((a,b)=>b-a).slice(0,20) : [0.31,0.24,0.18,0.12];
 
-    const qRegions = Object.keys(regionCounts);
-    const qRegionCounts = Object.values(regionCounts);
-
-    // Sort scores descending for plotting & label generation
-    scores.sort((a,b) => b - a);
-    const qScores = scores.slice(0, 20); // top 20 for chart
-
-    // === 1️⃣ Policy Status (Doughnut Chart) ===
-    new Chart(document.getElementById('quantumStatusChart'), {
-      type: 'doughnut',
-      data: {
-        labels: qStatus,
-        datasets: [{
-          data: qStatusCounts,
-          backgroundColor: ['#6c5ce7', '#a29bfe', '#00cec9', '#ff7675', '#74b9ff', '#ffeaa7']
-        }]
-      },
-      options: {
-        plugins: {
-          title: { display: true, text: 'Policy Status Breakdown (Quantum Search)' },
-          legend: { position: 'bottom' }
-        }
-      }
-    });
-
-    // === 2️⃣ Region-wise Policies (Bar Chart) ===
-    new Chart(document.getElementById('quantumRegionChart'), {
-      type: 'bar',
-      data: {
-        labels: qRegions,
-        datasets: [{
-          label: 'Policies',
-          data: qRegionCounts,
-          backgroundColor: '#8e7cf7'
-        }]
-      },
-      options: {
-        plugins: { title: { display: true, text: 'Policies by Region (Quantum Space)' } },
-        scales: { y: { beginAtZero: true } }
-      }
-    });
-
-    // === 3️⃣ Quantum Scores (Line Chart) ===
-    new Chart(document.getElementById('quantumScoreChart'), {
-      type: 'line',
-      data: {
-        labels: qScores.map((_, i) => `Result ${i+1}`),
-        datasets: [{
-          label: 'Quantum Similarity Scores',
-          data: qScores,
-          borderColor: '#6c5ce7',
-          backgroundColor: '#a29bfe66',
-          fill: true,
-          tension: 0.3,
-          pointRadius: 4
-        }]
-      },
-      options: {
-        plugins: { title: { display: true, text: 'Quantum Similarity Scores (top results)' } },
-        scales: { y: { beginAtZero: true } }
-      }
-    });
+    new Chart(document.getElementById('qStatusChart'), { type:'doughnut', data:{labels:qStatus,datasets:[{data:qStatusCounts}]}, options:{plugins:{title:{display:true,text:'Status Breakdown'}}}});
+    new Chart(document.getElementById('qRegionChart'), { type:'bar', data:{labels:qRegions,datasets:[{label:'Policies',data:qRegionCounts}]}, options:{scales:{y:{beginAtZero:true}}, plugins:{title:{display:true,text:'Policies by Region'}}}});
+    new Chart(document.getElementById('qScoreChart'), { type:'line', data:{labels:qScores.map((_,i)=>`R${i+1}`),datasets:[{label:'Q-Similarity',data:qScores,fill:true,tension:0.3}]}, options:{scales:{y:{beginAtZero:true}}, plugins:{title:{display:true,text:'Quantum Similarity (top)'}}}});
   </script>
-
 </body>
 </html>
