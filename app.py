@@ -15,6 +15,9 @@ from sentence_transformers import SentenceTransformer
 from sklearn.preprocessing import StandardScaler
 from sklearn.decomposition import PCA
 from datetime import datetime
+from fastapi.exceptions import RequestValidationError
+from fastapi import HTTPException
+from starlette.exceptions import HTTPException as StarletteHTTPException
 
 # Qiskit (quantum kernel)
 from qiskit.circuit.library import ZZFeatureMap
@@ -221,7 +224,7 @@ async def signup(request: Request, email: str = Form(...), password: str = Form(
 @app.get("/logout")
 def logout(request: Request):
     response = RedirectResponse(url="/", status_code=303)
-    response.delete_cookie("access_token")
+    response.delete_cookie("user")
     return response
 
 # ---------- Classical ----------
@@ -259,6 +262,17 @@ async def quantum_search(request: Request, query: str = Form(...), top_k: int = 
         "decision_score": q_out.get("decision_score"),
         "top_k": k
     })
+
+# ------------- Exception Handling -----------------
+@app.exception_handler(StarletteHTTPException)
+async def custom_http_exception_handler(request: Request, exc: StarletteHTTPException):
+    if exc.status_code == 403:
+        return templates.TemplateResponse(
+            "error.html", 
+            {"request": request, "message": "Please login to access this feature."},
+            status_code=403
+        )
+    return HTMLResponse(content=str(exc.detail), status_code=exc.status_code)
 
 # ---------------- Run with uvicorn ----------------
 if __name__ == "__main__":

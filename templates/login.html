@@ -1,23 +1,37 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <title>Login | PolicyNav</title>
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <link rel="stylesheet" href="/static/loginstyle.css" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login | SVM Dashboard</title>
+  <link rel="stylesheet" href="/static/css/loginstyle.css">
 </head>
-<body class="login-body">
-  <div class="login-container">
-    <h2>Welcome back ✨</h2>
-    <form method="post" action="/login">
-      <input type="email" name="email" placeholder="Email" required />
-      <input type="password" name="password" placeholder="Password" required />
-      {% if error %}
-        <p class="error">{{ error }}</p>
-      {% endif %}
-      <button type="submit">Sign in</button>
-    </form>
-    <p style="margin-top:10px;">Don't have an account? <a href="/signup">Create one</a></p>
+<body>
+  <div class="container">
+    <div class="right-panel">
+      <img src="/static/images/login.svg" alt="Illustration" class="illustration" />
+    </div>
+
+    <div class="left-panel">
+      
+      <h1>Welcome Back</h1>
+
+      <form class="form" method="post" action="/login">
+        <input type="email" name="email" placeholder="Email" required />
+        <input type="password" name="password" placeholder="Password" required />
+        <button type="submit">Login</button>
+      </form>
+
+      <div class="or">or continue with</div>
+
+      <div class="social">
+        <button class="google">G</button>
+        <button class="apple"></button>
+        <button class="facebook">f</button>
+      </div>
+
+      <p class="signup">Not a member? <a href="/signup">Sign Up</a></p>
+    </div>
   </div>
 </body>
 </html>

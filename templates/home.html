@@ -4,8 +4,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>PolicyNav | AI-driven Policy Insight</title>
-  <link rel="stylesheet" href="{{ url_for('static', path='css/style.css') }}">
-  <script src="{{ url_for('static', path='js/main.js') }}" defer></script>
+  <link rel="stylesheet" href="{{ url_for('static', path='css/homestyle.css') }}">
+  <script src="{{ url_for('static', path='js/home.js') }}" defer></script>
 </head>
 
 <body>
@@ -19,10 +19,21 @@
         <li><a href="#purpose">Purpose</a></li>
         <li><a href="#technology">Technology</a></li>
         <li><a href="#contact">Contact</a></li>
+        <a href="/classical">Classical Model</a>
+        <a href="/quantum">Quantum Model</a>
+        <a href="/login" class="login-btn">Login</a>
       </ul>
     </nav>
-    <a href="/login" class="login-btn">Login</a>
   </header>
+  <script>
+  function useModel(model) {
+    if (model === 'classical') {
+      window.location.href = '/classical';
+    } else if (model === 'quantum') {
+      window.location.href = '/quantum';
+    }
+  }
+  </script>
 
   <!-- HERO -->
   <section id="home" class="hero fade-in">
@@ -40,19 +51,15 @@
           It fuses the rigor of <strong>Machine Learning</strong> with the innovation of <strong>Quantum Computing</strong> — 
           unraveling how education policies shape societies and futures.
         </p>
-
         <p>
           This isn’t just another data project — it’s an evolving ecosystem where intelligence meets empathy. 
           Every model and visualization is crafted to bridge the gap between information and understanding.
         </p>
-
         <p>
           In a world overflowing with data, PolicyNav stands for clarity, transparency, and insight — turning static 
           text into meaningful stories that empower change.
         </p>
       </div>
-
-      <!-- Storyset Illustration -->
       <div class="section-img fade-up">
         <img src="{{ url_for('static', path='images/education.svg') }}" alt="AI research illustration">
       </div>
@@ -71,12 +78,10 @@
           Every policy has intent, but that intent often gets lost. 
           PolicyNav decodes that language — turning paragraphs into patterns and meaning.
         </p>
-
         <p>
           Our focus is <strong>Education Policies</strong> — because education drives transformation. 
           By exploring legislative reforms and social outcomes, PolicyNav gives a panoramic view of their real impact.
         </p>
-
         <p>
           Beyond analysis, our mission is to democratize understanding — 
           enabling informed citizens, transparent governments, and responsible policymaking.
@@ -99,31 +104,31 @@
   </section>
 
   <!-- CONTACT -->
-<section id="contact" class="section fade-up alt-bg">
-  <h2 class="section-title">Connect With Us</h2>
-  <div class="section-split">
-    <div class="section-text">
-      <p>
-        Have questions, ideas, or want to collaborate?  
-        PolicyNav welcomes researchers, technologists, and educators to join our journey toward transparent, accessible policy intelligence.
-      </p>
+  <section id="contact" class="section fade-up alt-bg">
+    <h2 class="section-title">Connect With Us</h2>
+    <div class="section-split">
+      <div class="section-text">
+        <p>
+          Have questions, ideas, or want to collaborate?  
+          PolicyNav welcomes researchers, technologists, and educators to join our journey toward transparent, accessible policy intelligence.
+        </p>
 
-      <div class="contact-links">
-        <p>🌐 <a href="https://www.linkedin.com/in/sai-surya-663b052b8/" target="_blank">LinkedIn</a></p>
-        <p>💻 <a href="https://github.com/Sayaan-cloud/PolicyNav-Public-Policy-Navigation-Using-AI" target="_blank">GitHub</a></p>
+        <div class="contact-links">
+          <p>🌐 <a href="https://www.linkedin.com/in/sai-surya-663b052b8/" target="_blank">LinkedIn</a></p>
+          <p>💻 <a href="https://github.com/Sayaan-cloud/PolicyNav-Public-Policy-Navigation-Using-AI" target="_blank">GitHub</a></p>
+        </div>
+      </div>
+
+      <div class="section-img fade-up">
+        <img src="{{ url_for('static', path='images/contact_us.svg') }}" alt="Contact us illustration">
       </div>
     </div>
-
-    <div class="section-img fade-up">
-      <img src="{{ url_for('static', path='images/contact_us.svg') }}" alt="Contact us illustration">
-    </div>
-  </div>
-</section>
-
+  </section>
 
   <!-- FOOTER -->
   <footer>
     <p>© 2025 PolicyNav. All rights reserved.</p>
   </footer>
+
 </body>
 </html>

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Access Denied</title>
+  <link rel="stylesheet" href="{{ url_for('static', path='css/main.css') }}">
+</head>
+<body>
+  <div class="error-container fade-in">
+    <h1>⚠️ Access Denied</h1>
+    <p>{{ message }}</p>
+    <a href="/login" class="purple-btn">Login</a>
+  </div>
+
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: #f8f5ff;
+      color: #2a0934;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    .error-container {
+      background: #fff;
+      padding: 40px 60px;
+      border-radius: 20px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+      text-align: center;
+    }
+    .purple-btn {
+      display: inline-block;
+      background: #7c3aed;
+      color: white;
+      padding: 10px 20px;
+      border-radius: 8px;
+      text-decoration: none;
+      margin-top: 20px;
+      font-weight: 600;
+      transition: 0.2s;
+    }
+    .purple-btn:hover {
+      background: #5b21b6;
+    }
+  </style>
+</body>
+</html>

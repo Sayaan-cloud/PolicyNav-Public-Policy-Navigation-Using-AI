@@ -4,48 +4,37 @@
   <meta charset="utf-8" />
   <title>PolicyNav — Classical</title>
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <link rel="stylesheet" href="/static/main.css" />
-  <style>
-    /* Quick fallback */
-    body{font-family:Inter, system-ui, -apple-system, sans-serif; background:#f5f8fc; margin:0; color:#222}
-    header{display:flex;justify-content:space-between;align-items:center;background:#fff;padding:16px 28px;box-shadow:0 2px 8px rgba(0,0,0,0.04)}
-    h1{margin:0;font-size:18px}
-    .logout-btn{background:#ff4757;color:#fff;border:none;padding:8px 12px;border-radius:8px;cursor:pointer}
-    form.search{display:flex;gap:10px;justify-content:center;padding:18px}
-    input[type="text"]{padding:10px;border-radius:8px;border:1px solid #e6e9f2;width:360px}
-    .results-container{width:90%;margin:20px auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:18px}
-    .result-card{background:#fff;padding:18px;border-radius:12px;box-shadow:0 6px 18px rgba(60,50,120,0.04);text-align:left}
-    .dashboard{width:90%;margin:32px auto;padding:18px;background:#fff;border-radius:12px;box-shadow:0 6px 18px rgba(108,92,231,0.06)}
-  </style>
+  <link rel="stylesheet" href="/static/css/main.css" />
 </head>
 <body>
-  <header>
-    <h1>📚 PolicyNav — Classical Search</h1>
-    <div style="display:flex;gap:12px;align-items:center">
-      <a href="/quantum" style="color:#6c5ce7;font-weight:600;text-decoration:none;margin-right:6px">⚛️ Quantum</a>
-      <form action="/logout" method="post" style="margin:0;">
-        <button class="logout-btn" type="submit">Logout</button>
+  <header class="navbar">
+  <div class="logo" onclick="window.location.href='/'">PolicyNav</div>
+  <nav>
+    <ul class="nav-links">
+      <li><a href="/classical" {% if 'classical' in request.path %}style="color:#d1a9ff;"{% endif %}>Classical</a></li>
+      <li><a href="/quantum" {% if 'quantum' in request.path %}style="color:#d1a9ff;"{% endif %}>Quantum</a></li>
+      <form action="/logout" method="get" style="display:inline;">
+        <button type="submit" class="logout-btn">Logout</button>
       </form>
-    </div>
-  </header>
+    </ul>
+  </nav>
+</header>
 
   <form class="search" method="post" action="/classical_search">
     <input type="text" name="query" placeholder="Search policies..." value="{{ query }}" required />
-    <div style="display:flex;align-items:center;gap:8px">
-      <label for="top_k">Results</label>
-      <input type="range" id="top_k" name="top_k" min="1" max="10" value="{{ top_k or 5 }}" oninput="this.nextElementSibling.value=this.value">
-      <output>{{ top_k or 5 }}</output>
-      <button type="submit" style="background:#6c5ce7;color:#fff;border:none;padding:10px 14px;border-radius:8px">Search</button>
-    </div>
+    <label for="top_k">Results</label>
+    <input type="range" id="top_k" name="top_k" min="1" max="10" value="{{ top_k or 5 }}" oninput="this.nextElementSibling.value=this.value">
+    <output>{{ top_k or 5 }}</output>
+    <button type="submit" class="purple-btn">Search</button>
   </form>
 
   {% if results %}
   <div class="results-container">
     {% for r in results %}
       <div class="result-card">
-        <h3 style="margin:0 0 6px 0">{{ r.title }} <small style="color:#666">({{ r.policy_id }})</small></h3>
-        <p style="margin:6px 0;color:#555"><b>Region:</b> {{ r.region }} | <b>Year:</b> {{ r.year }} | <b>Status:</b> {{ r.status }}</p>
-        <p style="color:#333">{{ r.summary }}</p>
+        <h3>{{ r.title }} <small style="color:#666">({{ r.policy_id }})</small></h3>
+        <p><b>Region:</b> {{ r.region }} | <b>Year:</b> {{ r.year }} | <b>Status:</b> {{ r.status }}</p>
+        <p>{{ r.summary }}</p>
         <p style="color:#6c5ce7;font-weight:700;margin-top:8px">Score: {{ "%.4f"|format(r.score) }}</p>
       </div>
     {% endfor %}
@@ -53,41 +42,36 @@
   {% endif %}
 
   <div class="dashboard">
-    <h2 style="margin-top:0">Classical Search Insights</h2>
-    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px">
-      <div style="background:#f8f7ff;padding:12px;border-radius:10px"><canvas id="statusChart"></canvas></div>
-      <div style="background:#f8f7ff;padding:12px;border-radius:10px"><canvas id="regionChart"></canvas></div>
-      <div style="background:#f8f7ff;padding:12px;border-radius:10px"><canvas id="scoreChart"></canvas></div>
+    <h2>Classical Search Insights...</h2>
+    <div class="dashboard-grid">
+      <div class="chart-box"><canvas id="statusChart"></canvas></div>
+      <div class="chart-box"><canvas id="regionChart"></canvas></div>
+      <div class="chart-box"><canvas id="scoreChart"></canvas></div>
     </div>
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script>
-    const classicalResults = JSON.parse('{{ results|default([])|tojson }}');
+    const data = JSON.parse('{{ results|default([])|tojson }}');
+    const statusCounts={}, regionCounts={}, scores=[];
 
-    // build aggregates
-    const statusCounts = {};
-    const regionCounts = {};
-    const scores = [];
-
-    classicalResults.forEach(r => {
-      const s = r.status || "Unknown";
-      const reg = r.region || "Unknown";
-      statusCounts[s] = (statusCounts[s] || 0) + 1;
-      regionCounts[reg] = (regionCounts[reg] || 0) + 1;
-      scores.push(Number(r.score || 0));
+    data.forEach(r=>{
+      const s=r.status||"Unknown";
+      const reg=r.region||"Unknown";
+      statusCounts[s]=(statusCounts[s]||0)+1;
+      regionCounts[reg]=(regionCounts[reg]||0)+1;
+      scores.push(Number(r.score||0));
     });
 
-    // fallback sample if empty
-    const statusLabels = Object.keys(statusCounts).length ? Object.keys(statusCounts) : ['Implemented','Planned','Draft'];
-    const statusData = Object.values(statusCounts).length ? Object.values(statusCounts) : [3,2,1];
-    const regionLabels = Object.keys(regionCounts).length ? Object.keys(regionCounts) : ['North','South','East','West'];
-    const regionData = Object.values(regionCounts).length ? Object.values(regionCounts) : [4,3,2,1];
-    const scoreData = scores.length ? scores : [0.12,0.24,0.31,0.41];
+    const statusLabels=Object.keys(statusCounts).length?Object.keys(statusCounts):['Implemented','Planned','Draft'];
+    const statusData=Object.values(statusCounts).length?Object.values(statusCounts):[3,2,1];
+    const regionLabels=Object.keys(regionCounts).length?Object.keys(regionCounts):['North','South','East','West'];
+    const regionData=Object.values(regionCounts).length?Object.values(regionCounts):[4,3,2,1];
+    const scoreData=scores.length?scores:[0.12,0.24,0.31,0.41];
 
-    new Chart(document.getElementById('statusChart'), { type:'doughnut', data:{labels:statusLabels,datasets:[{data:statusData}]}, options:{plugins:{title:{display:true,text:'Status Breakdown'}}}});
-    new Chart(document.getElementById('regionChart'), { type:'bar', data:{labels:regionLabels,datasets:[{label:'Policies',data:regionData}]}, options:{plugins:{title:{display:true,text:'Policies by Region'}},scales:{y:{beginAtZero:true}}}});
-    new Chart(document.getElementById('scoreChart'), { type:'line', data:{labels:scoreData.map((_,i)=>`R${i+1}`), datasets:[{label:'Similarity', data:scoreData, fill:true, tension:0.3}]}, options:{plugins:{title:{display:true,text:'Similarity Scores'}},scales:{y:{beginAtZero:true}}}});
+    new Chart(statusChart,{type:'doughnut',data:{labels:statusLabels,datasets:[{data:statusData,backgroundColor:['#7c3aed','#c4b5fd','#ddd6fe']}]},options:{plugins:{title:{display:true,text:'Status Breakdown'}}}});
+    new Chart(regionChart,{type:'bar',data:{labels:regionLabels,datasets:[{label:'Policies',data:regionData,backgroundColor:'#a78bfa'}]},options:{plugins:{title:{display:true,text:'Policies by Region'}},scales:{y:{beginAtZero:true}}}});
+    new Chart(scoreChart,{type:'line',data:{labels:scoreData.map((_,i)=>`R${i+1}`),datasets:[{label:'Similarity',data:scoreData,fill:true,borderColor:'#7c3aed',backgroundColor:'rgba(124,58,237,0.2)',tension:0.3}]},options:{plugins:{title:{display:true,text:'Similarity Scores'}},scales:{y:{beginAtZero:true}}}});
   </script>
 </body>
 </html>
