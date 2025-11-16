@@ -57,42 +57,6 @@ Governments release countless policies every year — often scattered, repetitiv
 
 ---
 
-## 📁 Folder Structure
-
-edu_policies/
-│
-├── app.py
-│
-├── classical/
-│   ├── classical_model.ipynb
-│   ├── policy_tfidf_matrix.pkl
-│   └── policy_vectorizer.pkl
-│
-├── quantum/
-│   ├── quantum_model.ipynb
-│   ├── quantum_policy_kernel_matrix.pkl
-│   ├── quantum_policy_qsvc_model.pkl
-│   ├── policy_scaler.pkl
-│   └── policy_pca.pkl
-│
-├── datasets/
-│   ├── education_policies.csv
-│   ├── train_policies.csv
-│   └── test_policies.csv
-│
-├── templates/
-│   ├── classical.html
-│   └── quantum.html
-│
-├── static/
-│   └── (your CSS + JS)
-│
-├── .gitignore
-├── requirements.txt
-└── README.md
-
----
-
 ## 🧩 How It Works
 
 1. User searches for a **policy or keyword**.  
